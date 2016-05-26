@@ -1,0 +1,20 @@
+{
+  "name": "experiments-seneca",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "lodash": "^4.13.1",
+    "seneca": "^2.1.0",
+    "seneca-amqp-transport": "^0.2.2",
+    "seneca-entity": "^0.1.1",
+    "seneca-mongo-store": "^0.2.0",
+    "seneca-rabbitmq-transport": "^0.3.1"
+  }
+}
