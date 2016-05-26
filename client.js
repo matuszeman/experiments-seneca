@@ -1,4 +1,7 @@
+'use strict';
+
 const _ = require('lodash');
+const myseneca = require('./seneca');
 
 const seneca = require('seneca')({
   tag: 'myclient',
@@ -30,8 +33,10 @@ seneca.client({
 
 //when using string as below to load a plugin - plugin name = 'plugins/test' thus plugin-options.js configuration won't work
 //seneca.use('plugins/test');
-seneca.use({init: require('./plugins/test'), name: 'test'});
+//seneca.use({init: require('./plugins/test'), name: 'test'});
 //seneca.use({init: require('./plugins/test'), name: 'test', tag:'mytag'});
+const plugin = myseneca.SenecaUtils.createPlugin(require('./services/test-obj'), {name: 'test', role: 'local'});
+seneca.use({init: plugin, name: 'test'});
 
 const onReady = runClient;
 
@@ -73,7 +78,7 @@ function runSeneca() {
 
 function runClient() {
   const SenecaClient = require('./seneca');
-  const client = new SenecaClient(this);
+  const client = new myseneca.SenecaClient(this);
 
   //NSQ
   //client.act('amqp', 'echo').then(console.log).catch(console.error);

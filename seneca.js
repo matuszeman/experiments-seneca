@@ -1,8 +1,9 @@
 'use strict';
 
 const _ = require('lodash');
+const bluebird = require('bluebird');
 
-module.exports = class SenecaClient {
+class SenecaClient {
   constructor(seneca) {
     this.seneca = seneca;
   }
@@ -21,36 +22,76 @@ module.exports = class SenecaClient {
       });
     });
   }
-};
 
-return;
+}
 
-seneca.registerService = function(service) {
-  const seneca = this;
-  const pluginName = service.name;
-  if(!pluginName) {
-    throw new Error('No service/plugin name');
+class SenecaUtils {
+  static createPlugin(service, opts) {
+    const pluginName = opts.name;
+    const role = opts.role;
+    if(!pluginName || !role) {
+      throw new Error('Both name and role needs to be specified');
+    }
+
+    let expose = opts.expose;
+    if(!expose) {
+      expose = [];
+      //find methods to expose
+      for (let methodName in service) {
+        let fn = service[methodName];
+        if (!_.isFunction(fn) || _.includes(['init', 'mergeOptions'], methodName)) {
+          continue;
+        }
+        expose.push(methodName);
+      }
+    }
+
+    const actions = [];
+    if(service.init) {
+      actions.push({
+        args: {
+          init: pluginName
+        },
+        fn: wrapper(service, service.init)
+      });
+    }
+
+    for(let method of expose) {
+      actions.push({
+        args: {
+          role: role,
+          cmd: method
+        },
+        fn: wrapper(service, service[method])
+      });
+    }
+
+    return function(options) {
+      const seneca = this;
+
+      if(service.mergeOptions) {
+        service.mergeOptions(options);
+      }
+
+      for(let action of actions) {
+        seneca.add(action.args, action.fn);
+      }
+
+      return {
+        name: pluginName
+      }
+    };
+
+    function wrapper(thisArg, fn) {
+      return function(args, done) {
+        bluebird.try(_.bind(fn, thisArg, args)).asCallback(done);
+      }
+    }
   }
+}
 
-  const cmds = [];
-  _.forOwn(service, (func, prop) => {
-    switch (prop) {
-      case 'init':
-        cmds.push({
-          args: {
-            init: pluginName
-          }
-        });
-        break;
-    }
-  });
+module.exports = {
+  SenecaClient,
+  SenecaUtils
+}
 
-  seneca.use(function(options) {
-
-
-
-    return {
-      name: pluginName
-    }
-  });
-};
