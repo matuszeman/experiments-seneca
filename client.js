@@ -33,10 +33,10 @@ seneca.client({
 
 //when using string as below to load a plugin - plugin name = 'plugins/test' thus plugin-options.js configuration won't work
 //seneca.use('plugins/test');
-//seneca.use({init: require('./plugins/test'), name: 'test'});
+seneca.use({init: require('./plugins/test'), name: 'test'});
 //seneca.use({init: require('./plugins/test'), name: 'test', tag:'mytag'});
-const plugin = myseneca.SenecaUtils.createPlugin(require('./services/test-obj'), {name: 'test', role: 'local'});
-seneca.use({init: plugin, name: 'test'});
+//const plugin = myseneca.SenecaUtils.createPlugin(require('./services/test-obj'), {name: 'test', role: 'local'});
+//seneca.use({init: plugin, name: 'test'});
 
 const onReady = runClient;
 

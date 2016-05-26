@@ -24,7 +24,7 @@ module.exports = {
 
   timeout(args) {
     return new Promise((resolve) => {
-      setTimeout(resolve, this.options.timeout);
+      setTimeout(resolve, options.timeout);
     });
   }
 };
