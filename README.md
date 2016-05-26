@@ -1,4 +1,7 @@
 # Installation
+
+RabbitMQ https://www.rabbitmq.com/download.html
+
 ```
 npm install
 ```
@@ -7,7 +10,7 @@ npm install
 
 Runs test plugin on "remote" servers showcasing different transports
 ```
-node services.js
+node servers.js
 ```
 
 Runs "local" client

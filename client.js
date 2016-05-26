@@ -46,19 +46,19 @@ function runClient() {
   const seneca = this;
 
   //NSQ
-  seneca.act({
-    role: 'amqp', cmd: 'echo'
-  }, console.log);
+  //seneca.act({
+  //  role: 'amqp', cmd: 'echo'
+  //}, console.log);
 
   //HTTP
-  seneca.act({
-    role: 'http', cmd: 'echo'
-  }, console.log);
+  //seneca.act({
+  //  role: 'http', cmd: 'echo'
+  //}, console.log);
 
   //TCP
-  seneca.act({
-    role: 'tcp', cmd: 'echo'
-  }, console.log);
+  //seneca.act({
+  //  role: 'tcp', cmd: 'echo'
+  //}, console.log);
 
   //Local
   seneca.act({

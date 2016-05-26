@@ -19,7 +19,7 @@ if(servers.amqp) {
       type: 'amqp',
       pin: 'role:amqp' //https://github.com/seneca-contrib/seneca-amqp-transport#how-it-works
     });
-  })
+  });
 }
 
 if(servers.http) {
