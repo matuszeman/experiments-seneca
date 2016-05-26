@@ -33,18 +33,18 @@ seneca.client({
 seneca.use({init: require('./plugins/test'), name: 'test'});
 //seneca.use({init: require('./plugins/test'), name: 'test', tag:'mytag'});
 
+const onReady = runClient;
+
 //run once
-seneca.ready(runClient);
+seneca.ready(onReady);
 
 //runs every 5s
 //seneca.ready(function() {
-//  runClient.call(this);
-//  setInterval(runClient.bind(this), 5000);
+//  onReady.call(this);
+//  setInterval(onReady.bind(this), 5000);
 //});
 
-function runClient() {
-  const seneca = this;
-
+function runSeneca() {
   //NSQ
   //seneca.act({
   //  role: 'amqp', cmd: 'echo'
@@ -69,4 +69,24 @@ function runClient() {
   //seneca.act({
   //  role: 'local', cmd: 'timeout'
   //}, console.log);
+}
+
+function runClient() {
+  const SenecaClient = require('./seneca');
+  const client = new SenecaClient(this);
+
+  //NSQ
+  //client.act('amqp', 'echo').then(console.log).catch(console.error);
+
+  //HTTP
+  //client.act('http', 'echo').then(console.log).catch(console.error);
+
+  //TCP
+  //client.act('tcp', 'echo').then(console.log).catch(console.error);
+
+  //Local
+  client.act('local', 'echo').then(console.log).catch(console.error);
+
+  //Local - timeout
+  //client.act('local', 'timeout').then(console.log).catch(console.error);
 }
