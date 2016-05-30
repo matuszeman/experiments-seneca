@@ -93,5 +93,4 @@ class SenecaUtils {
 module.exports = {
   SenecaClient,
   SenecaUtils
-}
-
+};

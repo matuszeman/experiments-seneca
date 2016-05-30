@@ -1,13 +1,14 @@
 'use strict';
 
 const _ = require('lodash');
+const AbstractService = require('./abstract-service');
 
-module.exports = class Events {
+module.exports = class Events extends AbstractService {
   constructor() {
-    this.options = {
+    super({
       initDelay: 1000,
       timeout: 10000
-    };
+    });
   }
 
   init() {
@@ -16,12 +17,8 @@ module.exports = class Events {
       setTimeout(function() {
         console.log('... test plugin ready');//XXX
         resolve();
-      }, options.initDelay);
+      }, this.options.initDelay);
     });
-  }
-
-  mergeOptions(options) {
-    _.merge(this.options, options);
   }
 
   //actions
