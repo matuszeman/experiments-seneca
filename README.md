@@ -14,6 +14,15 @@ This experiment tries to come up with a solution for applications with the follo
   commands and used only for commands running remotely
 * Remotely running services can be scale out horizontally
 
+__Possible advantages over 'native' seneca plugins__
+
+* "Implement and test with existing codebase first" approach and refactor into separate service modules later if required
+* Whole application can run from single machine without any remote service dependencies in development environment,
+  while in production any single/multiple services can be deployed on separate server instances (matter of configuration only)
+* An implementation is Seneca agnostic thus easily re-used with other frameworks/approaches later if needed
+* As you would expose remote services consumed by your own application, same approach can be used for 3rd party consumers (TODO security)
+* At least but not last - nice OO and very well testable approach
+
 # How to achieve this?
 
 ## Seneca concept
