@@ -22,6 +22,7 @@ module.exports = class AbstractService {
   }
 
   promiseMethod(args, schema, func) {
+    args = args || {};
     const val = this.validateArgs(args, schema, true);
     if (val) {
       return val;
@@ -34,7 +35,7 @@ module.exports = class AbstractService {
   }
 
   validateArgs(args, schema, promise) {
-    const ret = Joi.validate(args, schema, { stripUnknown: true });
+    const ret = Joi.validate(args, schema, { stripUnknown: true, presence: 'required' });
     if (ret.error) {
       if (promise) {
         return Promise.reject(ret.error);

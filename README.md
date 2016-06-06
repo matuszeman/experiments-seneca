@@ -36,7 +36,18 @@ Service methods needs to follow certain rules so they can be migrated into senec
   (promise implementation catches possible exceptions within the code and returns rejected promise in this case)
 * Service class implements a method which accepts `options` object (plugin options) `mergeOptions(options)`
 * Service class can optionally implement `init()` method which can be used to initialize the service asynchronously (seneca plugin init.)  
+* Error handling does not depend on Error instance type
 
+__Error handling__
+
+In case of error, Seneca creates Error object locally and sets Error properties sent from remote service to this local instance.
+Thus the application code should not depend on Error instance type neither error message but instead Error properties can be used to distinguish
+between different error types.
+
+__TODO__
+
+* Consider using Boom error package for application errors
+* ???
 
 # Implementation
 

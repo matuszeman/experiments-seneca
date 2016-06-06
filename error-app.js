@@ -3,13 +3,15 @@
 const co = require('co');
 
 function renderError(msg, err) {
-  console.log(msg);//XXX
+  console.log(msg, '>>>', err.message);//XXX
+  //user error - using Boom package
+  if (err.isBoom) {
+    console.log('User error data: ', err.data);//XXX
+  }
   //console.log(err);//XXX
 }
 
-function* runApp(dic) {
-  const errorService = dic.errorService();
-
+function* errorMiddleware(errorService) {
   console.log('----------------------------------');//XXX
   console.log('    RUN AS GENERATOR');//XXX
   console.log('----------------------------------');//XXX
@@ -37,6 +39,18 @@ function* runApp(dic) {
     renderError('CATCHED generatorProgrammerError', err);//XXX
   }
 
+  try {
+    yield errorService.generatorArgValidationError();
+  } catch(err) {
+    renderError('CATCHED generatorArgValidationError', err);//XXX
+  }
+
+  try {
+    yield errorService.promiseArgValidationError();
+  } catch(err) {
+    renderError('CATCHED promiseArgValidationError', err);//XXX
+  }
+
 
   console.log('----------------------------------');//XXX
   console.log('    RUN AS PROMISE');//XXX
@@ -47,7 +61,7 @@ function* runApp(dic) {
       renderError('PROMISE CATCH promiseOperationalError', err);//XXX
     }));
   } catch(err) {
-    renderError('CATCHED promiseOperationalError', err);//XXX
+    renderError('XXX CATCHED promiseOperationalError', err);//XXX
   }
 
   try {
@@ -55,7 +69,15 @@ function* runApp(dic) {
       renderError('PROMISE CATCH promiseProgrammerError', err);//XXX
     }));
   } catch(err) {
-    renderError('CATCHED promiseProgrammerError', err);//XXX
+    renderError('XXX CATCHED promiseProgrammerError', err);//XXX
+  }
+
+  try {
+    proms.push(errorService.promiseArgValidationError().catch((err) => {
+      renderError('PROMISE CATCH promiseArgValidationError', err);//XXX
+    }));
+  } catch(err) {
+    renderError('XXX CATCHED promiseArgValidationError', err);//XXX
   }
 
   yield proms;
@@ -63,7 +85,7 @@ function* runApp(dic) {
 
 module.exports = function(dic) {
   co(function*() {
-    return yield runApp(dic);
+    return yield errorMiddleware(dic.errorService());
   }).then(() => {
     console.log('APPLICATION SUCCESS');//XXX
   }, (err) => {

@@ -6,14 +6,12 @@ const Joi = require('joi');
 const AbstractService = require('./abstract-service');
 
 module.exports = class BcryptService extends AbstractService {
-  constructor(encryptor) {
+  constructor() {
     super({
       bcryptRounds: 10
     }, {
       bcryptRounds: Joi.number()
     });
-
-    this.encryptor = encryptor;
   }
 
   bcryptHash(args) {

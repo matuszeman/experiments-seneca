@@ -2,10 +2,7 @@
 
 const co = require('co');
 
-function* runApp(dic) {
-  const cryptoService = dic.docCryptoService();
-  const bcryptService = dic.bcryptService();
-
+function* appMiddleware(cryptoService, bcryptService) {
   const encrypt = yield cryptoService.encrypt({type: 'doca', doc: {enc1: 'AAAA', enc2: 'BBBB', field1: 'XXXX'}});
   console.log('Encrypt', encrypt);//XXX
   const decrypt = yield cryptoService.decrypt({type: 'doca', doc: encrypt.doc});
@@ -19,6 +16,6 @@ function* runApp(dic) {
 
 module.exports = function(dic) {
   co(function*() {
-    return yield runApp(dic);
+    return yield appMiddleware(dic.docCryptoService(), dic.bcryptService());
   }).then(console.log, console.error);
 };

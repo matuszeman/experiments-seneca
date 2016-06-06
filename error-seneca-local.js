@@ -15,7 +15,9 @@ seneca.options('./plugin-options.js');
 
 seneca.use({
   init: SenecaFactory.createPlugin(new ErrorService(), {
-    expose: ['promiseOperationalError', 'promiseProgrammerError', 'generatorOperationalError', 'generatorProgrammerError']
+    expose: [
+      'promiseOperationalError', 'promiseProgrammerError', 'generatorOperationalError', 'generatorProgrammerError',
+      'generatorArgValidationError', 'promiseArgValidationError']
   }),
   name: 'ErrorService'
 });
