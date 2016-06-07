@@ -21,7 +21,7 @@ __Possible advantages over 'native' seneca plugins__
   while in production any single/multiple services can be deployed on separate server instances (matter of configuration only)
 * An implementation is Seneca agnostic thus easily re-used with other frameworks/approaches later if needed
 * As you would expose remote services consumed by your own application, same approach can be used for 3rd party consumers (TODO security)
-* At least but not last - nice OO and very well testable approach
+* Nice OO and very well testable approach
 
 # How to achieve this?
 
