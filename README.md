@@ -41,6 +41,7 @@ Service methods needs to follow certain rules so they can be migrated into senec
 
 * Service instance is stateless
 * Class methods accepts one parameter only (plain object, validated by the method itself) and return plain object
+* Methods do not mutate arguments
 * All methods are asynchronous and can be implemented as generator or using promises
   (promise implementation catches possible exceptions within the code and returns rejected promise in this case)
 * Service class implements a method which accepts `options` object (plugin options) `mergeOptions(options)`
