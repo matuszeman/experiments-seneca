@@ -201,3 +201,63 @@ The application
 ```
 node error-seneca-remote.js --seneca.log.quiet
 ```
+
+
+# Logging
+
+Debug handler params:
+
+1. timestamp
+2. sender (senecaInstanceName) - ?/?/?/senecaTag
+3. logLevel
+4. senecaCmd
+5. ?
+6. direction - IN, OUT, ???
+7. ?
+8. pins
+9. params (JSON string)
+10. ?
+11. msgId
+12. ?
+13. receiver (dir: IN '-', OUT senecaInstanceName)
+
+## Examples
+
+ACT out
+```
+{ '0': { 2016-10-12T08:32:51.260Z 'short$': undefined },
+  '1': 'rjsybxwrxffe/1476261169593/17740/app-seneca-remote',
+  '2': 'debug',
+  '3': 'act',
+  '4': 'client$       ',
+  '5': 'OUT',
+  '6': 'r34wjvua1ngi/vh98t5wgu869',
+  '7': 'role:BcryptService',
+  '8': '{hash:$2a$04$7EoMaiGdnyxiBM7jrQ6ZY.vWzjHVOJoGx/J73fpl.uz.6ncMjQymm}',
+  '9': 'EXIT',
+  '10': '(pab73pknwyci)',
+  '11': 'CLIENT',
+  '12': 'dx1ghgb6k9ci/1476261169677/17741/app-remote-services',
+  '13': 12,
+  '14': '-',
+  '15': undefined }
+```
+
+ACT in
+```
+{ '0': { 2016-10-12T08:32:51.261Z 'short$': undefined },
+  '1': 'rjsybxwrxffe/1476261169593/17740/app-seneca-remote',
+  '2': 'debug',
+  '3': 'act',
+  '4': 'client$       ',
+  '5': 'IN',
+  '6': 'x9dm126kafhm/0h7yr8p708fn',
+  '7': 'role:BcryptService',
+  '8': '{role:BcryptService,cmd:bcryptCheck,value:TEST,hash:$2a$04$7EoMaiGdnyxiBM7jrQ6ZY.vWzjHVOJoGx/J73fpl.uz.6ncMjQym',
+  '9': 'ENTRY',
+  '10': '(pab73pknwyci)',
+  '11': 'CLIENT',
+  '12': '-',
+  '13': '-',
+  '14': undefined }
+```

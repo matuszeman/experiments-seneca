@@ -3,7 +3,21 @@ const SenecaFactory = require('./seneca').SenecaFactory;
 const app = require('./app');
 
 const seneca = require('seneca')({
-  tag: 'myclient',
+  tag: 'app-seneca-remote',
+  log: {
+    level: 'all',
+    map: [
+      {
+        level: 'debug',
+        handler: function(timestamp, sender, level, cmd, client, direction, id, pins, params, arg1, arg2, type, receiver, number, ...args) {
+          if (receiver !== '-' && cmd === 'act') {
+            const ts = new Date(timestamp);
+            console.log(`[${ts}] ${sender} -> ${receiver}: ${pins}, ${params}`);//XXX
+          }
+        }
+      }
+    ]
+  },
   timeout: 3000 // action timeout
 });
 

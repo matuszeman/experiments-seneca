@@ -6,7 +6,12 @@ const BcryptService = require('./services/bcrypt-service');
 const ErrorService = require('./services/error-service');
 const Encryptor = require('./services/encryptor');
 
-let seneca = require('seneca')();
+let seneca = require('seneca')({
+  tag: 'app-remote-services',
+  log: {
+    level: 'all'
+  }
+});
 seneca.options('./plugin-options.js');
 
 seneca.use({
