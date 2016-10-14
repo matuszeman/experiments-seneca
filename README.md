@@ -233,13 +233,19 @@ seneca.use(require('./logger').plugin, {
 
 ## Log entries implemented
 
+Along with other parameters listed below, each log entry also includes:
+
+* ts - Date object
+* level - debug, error, ...
+* instance - local seneca instance tag
+
 ### act-requests
 
 * type: 'client-act-request' / 'service-act-request'
 * service
 * cmd
 * payload
-* remoteInstance (TODO not currently available for client-act-request) 
+* remoteInstance - remote seneca instance tag (TODO not currently available for client-act-request) 
 
 ### act-response
 
