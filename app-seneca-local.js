@@ -6,9 +6,36 @@ const DocCryptoService = require('./services/doc-crypto-service');
 const BcryptService = require('./services/bcrypt-service');
 const Encryptor = require('./services/encryptor');
 
+const SenecaLogger = require('./logger').SenecaLogger;
+const logger = new SenecaLogger();
+
 const seneca = require('seneca')({
-  tag: 'myclient',
+  tag: 'APP-local',
   timeout: 2000, // action timeout
+  default_plugins: {
+    basic: false,
+    cluster: false,
+    'mem-store': false,
+    repl: false,
+    transport: true,
+    web: false
+  },
+  debug: {
+    //act_caller: true
+  },
+  log: {
+    level: 'all',
+    map: [
+      {
+        level: 'debug,error',
+        handler: function() {
+          console.log(arguments);//XXX
+          const entry = logger.createEntry(arguments);
+          console.log(entry);//XXX
+        }
+      }
+    ]
+  }
 });
 seneca.options('./plugin-options.js');
 
@@ -37,6 +64,9 @@ seneca.use({
 
 seneca.ready(function() {
   const seneca = this;
+
+  //const xx = seneca.find({role: 'BcryptService', cmd: 'bcryptHash'});
+  //console.log('>>>>>>>>>', xx);//XXX
 
   const SenecaClient = require('./seneca').SenecaClient;
   const client = new SenecaClient(seneca);

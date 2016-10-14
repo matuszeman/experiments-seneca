@@ -6,10 +6,25 @@ const BcryptService = require('./services/bcrypt-service');
 const ErrorService = require('./services/error-service');
 const Encryptor = require('./services/encryptor');
 
+const SenecaLogger = require('./logger').SenecaLogger;
+const logger = new SenecaLogger();
+
 let seneca = require('seneca')({
-  tag: 'app-remote-services',
+  tag: 'SERVICES-111',
   log: {
-    level: 'all'
+    level: 'all',
+    map: [
+      {
+        level: 'debug+',
+        handler: function() {
+          //console.log(arguments);//XXX
+          const entry = logger.createEntry(arguments);
+          if (entry) {
+            console.log(entry);//XXX
+          }
+        }
+      }
+    ]
   }
 });
 seneca.options('./plugin-options.js');

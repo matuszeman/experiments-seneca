@@ -2,23 +2,35 @@ const SenecaFactory = require('./seneca').SenecaFactory;
 
 const app = require('./app');
 
+const SenecaLogger = require('./logger').SenecaLogger;
+const logger = new SenecaLogger();
+
 const seneca = require('seneca')({
-  tag: 'app-seneca-remote',
+  tag: 'APP-remote',
+  timeout: 3000, // action timeout
+  default_plugins: {
+    basic: false,
+    cluster: false,
+    'mem-store': false,
+    repl: false,
+    transport: true,
+    web: false
+  },
   log: {
     level: 'all',
     map: [
       {
-        level: 'debug',
-        handler: function(timestamp, sender, level, cmd, client, direction, id, pins, params, arg1, arg2, type, receiver, number, ...args) {
-          if (receiver !== '-' && cmd === 'act') {
-            const ts = new Date(timestamp);
-            console.log(`[${ts}] ${sender} -> ${receiver}: ${pins}, ${params}`);//XXX
+        level: 'debug+',
+        handler: function() {
+          //console.log(arguments);//XXX
+          const entry = logger.createEntry(arguments);
+          if (entry) {
+            console.log(entry);//XXX
           }
         }
       }
     ]
-  },
-  timeout: 3000 // action timeout
+  }
 });
 
 seneca.client({
@@ -32,6 +44,9 @@ seneca.client({
 
 seneca.ready(function() {
   const seneca = this;
+
+  //const xx = seneca.find({role: 'BcryptService', cmd: 'bcryptHash'});
+  //console.log('>>>>>>>>>', xx);//XXX
 
   const SenecaClient = require('./seneca').SenecaClient;
   const client = new SenecaClient(seneca);

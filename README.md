@@ -207,57 +207,368 @@ node error-seneca-remote.js --seneca.log.quiet
 
 Debug handler params:
 
-1. timestamp
-2. sender (senecaInstanceName) - ?/?/?/senecaTag
-3. logLevel
-4. senecaCmd
-5. ?
-6. direction - IN, OUT, ???
-7. ?
-8. pins
-9. params (JSON string)
-10. ?
-11. msgId
-12. ?
-13. receiver (dir: IN '-', OUT senecaInstanceName)
+0. timestamp
+1. caller (senecaInstanceName) - ?/?/?/senecaTag
+2. logLevel
+3. senecaCmd
+4. ?
+5. direction - IN, OUT, ???
+6. ?
+7. pins
+8. params (JSON string)
+9. ?
+10. msgId
+11. ?
+12. receiver (dir: IN '-', OUT senecaInstanceName)
 
 ## Examples
 
-ACT out
-```
-{ '0': { 2016-10-12T08:32:51.260Z 'short$': undefined },
-  '1': 'rjsybxwrxffe/1476261169593/17740/app-seneca-remote',
-  '2': 'debug',
-  '3': 'act',
-  '4': 'client$       ',
-  '5': 'OUT',
-  '6': 'r34wjvua1ngi/vh98t5wgu869',
-  '7': 'role:BcryptService',
-  '8': '{hash:$2a$04$7EoMaiGdnyxiBM7jrQ6ZY.vWzjHVOJoGx/J73fpl.uz.6ncMjQymm}',
-  '9': 'EXIT',
-  '10': '(pab73pknwyci)',
-  '11': 'CLIENT',
-  '12': 'dx1ghgb6k9ci/1476261169677/17741/app-remote-services',
-  '13': 12,
-  '14': '-',
-  '15': undefined }
-```
+### Call request
 
-ACT in
+Remote:
+
 ```
-{ '0': { 2016-10-12T08:32:51.261Z 'short$': undefined },
-  '1': 'rjsybxwrxffe/1476261169593/17740/app-seneca-remote',
+{ '0': { 2016-10-12T11:57:35.533Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
   '2': 'debug',
   '3': 'act',
   '4': 'client$       ',
   '5': 'IN',
-  '6': 'x9dm126kafhm/0h7yr8p708fn',
+  '6': 'glxxyxft6m58/hkcwiiiazq9i',
   '7': 'role:BcryptService',
-  '8': '{role:BcryptService,cmd:bcryptCheck,value:TEST,hash:$2a$04$7EoMaiGdnyxiBM7jrQ6ZY.vWzjHVOJoGx/J73fpl.uz.6ncMjQym',
+  '8': '{role:BcryptService,cmd:bcryptHash,value:TEST}',
   '9': 'ENTRY',
-  '10': '(pab73pknwyci)',
+  '10': '(7ls2geeeo9dn)',
   '11': 'CLIENT',
   '12': '-',
   '13': '-',
+  '14': undefined }  
+```
+
+Local:
+
+```
+{ '0': { 2016-10-12T12:08:11.325Z 'short$': undefined },
+  '1': 'm37qtkw0gxzr/1476274090764/28333/APP-local',
+  '2': 'debug',
+  '3': 'act',
+  '4': 'BcryptService',
+  '5': 'IN',
+  '6': 'bjeugkt9vp2k/4gtyqezlaxb0',
+  '7': 'cmd:bcryptHash,role:BcryptService',
+  '8': '{role:BcryptService,cmd:bcryptHash,value:TEST}',
+  '9': 'ENTRY',
+  '10': '(yoiwge1hg6ii)',
+  '11': '-',
+  '12': '-',
+  '13': '-',
   '14': undefined }
+```
+
+### Call response
+
+Remote:
+```
+{ '0': { 2016-10-12T11:57:36.575Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': 'act',
+  '4': 'client$       ',
+  '5': 'OUT',
+  '6': 'glxxyxft6m58/hkcwiiiazq9i',
+  '7': 'role:BcryptService',
+  '8': '{hash:$2a$04$g7lJ71GhOfpInyHab1vlS.ufLmzuPQDkKjhdM53UEMBA4pSez3hoy}',
+  '9': 'EXIT',
+  '10': '(hkcwiiiazq9i)',
+  '11': 'CLIENT',
+  '12': 'cwf9rwi5t9xm/1476273454893/27756/SERVICES-111',
+  '13': 1042,
+  '14': '-',
+  '15': undefined }
+```
+
+
+Local:
+```
+{ '0': { 2016-10-12T12:08:11.332Z 'short$': undefined },
+  '1': 'm37qtkw0gxzr/1476274090764/28333/APP-local',
+  '2': 'debug',
+  '3': 'act',
+  '4': 'BcryptService',
+  '5': 'OUT',
+  '6': 'bjeugkt9vp2k/4gtyqezlaxb0',
+  '7': 'cmd:bcryptHash,role:BcryptService',
+  '8': '{hash:$2a$04$EDs2QwlQyOkXqJ1gK2Db4e9Lsz9hVDUuwjBoHBTXMofEMMuvB4XIC}',
+  '9': 'EXIT',
+  '10': '(yoiwge1hg6ii)',
+  '11': '-',
+  '12': '-',
+  '13': 7,
+  '14': '-',
+  '15': undefined }
+
+```
+
+Send init
+```
+{ '0': { 2016-10-12T11:57:35.536Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': '-',
+  '4': '-',
+  '5': 'ACT',
+  '6': 'd6vo9alltwer/p5ulgzv006t0',
+  '7': 'name:transport,plugin:define,role:seneca,seq:4,tag:undefined',
+  '8': 'plugin',
+  '9': 'transport',
+  '10': 'ACT',
+  '11': '9ltwz8rg4hrt/ssd2gkrzagh8',
+  '12': 'hook:client,role:transport,type:tcp',
+  '13': 'client',
+  '14': 'tcp',
+  '15': 'send-init',
+  '16': { pin: { role: 'BcryptService' } },
+  '17': 'seneca_role_BcryptService_',
+  '18': 
+   { type: 'tcp',
+     port: 10202,
+     pins: [ [Object], [Object] ],
+     pg: 'role:BcryptService;role:DocCryptoService',
+     id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp',
+     role: 'transport',
+     hook: 'client',
+     'plugin$': { name: 'client$', tag: undefined },
+     'ungate$': true,
+     'fatal$': true,
+     'tx$': 'ssd2gkrzagh8',
+     'meta$': 
+      { id: '9ltwz8rg4hrt/ssd2gkrzagh8',
+        tx: 'ssd2gkrzagh8',
+        start: 1476273455525,
+        pattern: 'hook:client,role:transport,type:tcp',
+        action: '(eni979215q6p)',
+        entry: true,
+        chain: [],
+        sync: true },
+     host: '127.0.0.1',
+     timeout: 5555 } }
+{ '0': { 2016-10-12T11:57:35.538Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': '-',
+  '4': '-',
+  '5': 'ACT',
+  '6': 'd6vo9alltwer/p5ulgzv006t0',
+  '7': 'name:transport,plugin:define,role:seneca,seq:4,tag:undefined',
+  '8': 'plugin',
+  '9': 'transport',
+  '10': 'ACT',
+  '11': '9ltwz8rg4hrt/ssd2gkrzagh8',
+  '12': 'hook:client,role:transport,type:tcp',
+  '13': 'client',
+  '14': 'tcp',
+  '15': 'reconnect',
+  '16': { pin: { role: 'BcryptService' } },
+  '17': 'seneca_role_BcryptService_',
+  '18': 
+   { type: 'tcp',
+     port: 10202,
+     pins: [ [Object], [Object] ],
+     pg: 'role:BcryptService;role:DocCryptoService',
+     id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp',
+     role: 'transport',
+     hook: 'client',
+     'plugin$': { name: 'client$', tag: undefined },
+     'ungate$': true,
+     'fatal$': true,
+     'tx$': 'ssd2gkrzagh8',
+     'meta$': 
+      { id: '9ltwz8rg4hrt/ssd2gkrzagh8',
+        tx: 'ssd2gkrzagh8',
+        start: 1476273455525,
+        pattern: 'hook:client,role:transport,type:tcp',
+        action: '(eni979215q6p)',
+        entry: true,
+        chain: [],
+        sync: true },
+     host: '127.0.0.1',
+     timeout: 5555 } }
+{ '0': { 2016-10-12T11:57:35.542Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': 'plugin',
+  '4': 'client$       ',
+  '5': 'ADD',
+  '6': '(vtbzd5v1cjmm)',
+  '7': 'cmd:close,role:seneca',
+  '8': '',
+  '9': undefined }
+{ '0': { 2016-10-12T11:57:35.543Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': '-',
+  '4': '-',
+  '5': 'ACT',
+  '6': 'd6vo9alltwer/p5ulgzv006t0',
+  '7': 'name:transport,plugin:define,role:seneca,seq:4,tag:undefined',
+  '8': 'plugin',
+  '9': 'transport',
+  '10': 'ACT',
+  '11': '9ltwz8rg4hrt/ssd2gkrzagh8',
+  '12': 'hook:client,role:transport,type:tcp',
+  '13': 'client',
+  '14': 'tcp',
+  '15': 'error',
+  '16': { pin: { role: 'BcryptService' } },
+  '17': 'seneca_role_BcryptService_',
+  '18': 
+   { type: 'tcp',
+     port: 10202,
+     pins: [ [Object], [Object] ],
+     pg: 'role:BcryptService;role:DocCryptoService',
+     id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp',
+     role: 'transport',
+     hook: 'client',
+     'plugin$': { name: 'client$', tag: undefined },
+     'ungate$': true,
+     'fatal$': true,
+     'tx$': 'ssd2gkrzagh8',
+     'meta$': 
+      { id: '9ltwz8rg4hrt/ssd2gkrzagh8',
+        tx: 'ssd2gkrzagh8',
+        start: 1476273455525,
+        pattern: 'hook:client,role:transport,type:tcp',
+        action: '(eni979215q6p)',
+        entry: true,
+        chain: [],
+        sync: true },
+     host: '127.0.0.1',
+     timeout: 5555 },
+  '19': 'Error: connect ECONNREFUSED 127.0.0.1:10202\n    at Object.exports._errnoException (util.js:1007:11)\n    at exports._exceptionWithHostPort (util.js:1030:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)' }
+{ '0': { 2016-10-12T11:57:35.544Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': '-',
+  '4': '-',
+  '5': 'ACT',
+  '6': 'd6vo9alltwer/p5ulgzv006t0',
+  '7': 'name:transport,plugin:define,role:seneca,seq:4,tag:undefined',
+  '8': 'plugin',
+  '9': 'transport',
+  '10': 'ACT',
+  '11': '9ltwz8rg4hrt/ssd2gkrzagh8',
+  '12': 'hook:client,role:transport,type:tcp',
+  '13': 'client',
+  '14': 'tcp',
+  '15': 'disconnect',
+  '16': { pin: { role: 'BcryptService' } },
+  '17': 'seneca_role_BcryptService_',
+  '18': 
+   { type: 'tcp',
+     port: 10202,
+     pins: [ [Object], [Object] ],
+     pg: 'role:BcryptService;role:DocCryptoService',
+     id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp',
+     role: 'transport',
+     hook: 'client',
+     'plugin$': { name: 'client$', tag: undefined },
+     'ungate$': true,
+     'fatal$': true,
+     'tx$': 'ssd2gkrzagh8',
+     'meta$': 
+      { id: '9ltwz8rg4hrt/ssd2gkrzagh8',
+        tx: 'ssd2gkrzagh8',
+        start: 1476273455525,
+        pattern: 'hook:client,role:transport,type:tcp',
+        action: '(eni979215q6p)',
+        entry: true,
+        chain: [],
+        sync: true },
+     host: '127.0.0.1',
+     timeout: 5555 },
+  '19': 'Error: connect ECONNREFUSED 127.0.0.1:10202\n    at Object.exports._errnoException (util.js:1007:11)\n    at exports._exceptionWithHostPort (util.js:1030:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)' }
+{ '0': { 2016-10-12T11:57:36.546Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': '-',
+  '4': '-',
+  '5': 'ACT',
+  '6': 'd6vo9alltwer/p5ulgzv006t0',
+  '7': 'name:transport,plugin:define,role:seneca,seq:4,tag:undefined',
+  '8': 'plugin',
+  '9': 'transport',
+  '10': 'ACT',
+  '11': '9ltwz8rg4hrt/ssd2gkrzagh8',
+  '12': 'hook:client,role:transport,type:tcp',
+  '13': 'client',
+  '14': 'tcp',
+  '15': 'reconnect',
+  '16': { pin: { role: 'BcryptService' } },
+  '17': 'seneca_role_BcryptService_',
+  '18': 
+   { type: 'tcp',
+     port: 10202,
+     pins: [ [Object], [Object] ],
+     pg: 'role:BcryptService;role:DocCryptoService',
+     id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp',
+     role: 'transport',
+     hook: 'client',
+     'plugin$': { name: 'client$', tag: undefined },
+     'ungate$': true,
+     'fatal$': true,
+     'tx$': 'ssd2gkrzagh8',
+     'meta$': 
+      { id: '9ltwz8rg4hrt/ssd2gkrzagh8',
+        tx: 'ssd2gkrzagh8',
+        start: 1476273455525,
+        pattern: 'hook:client,role:transport,type:tcp',
+        action: '(eni979215q6p)',
+        entry: true,
+        chain: [],
+        sync: true },
+     host: '127.0.0.1',
+     timeout: 5555 } }
+{ '0': { 2016-10-12T11:57:36.547Z 'short$': undefined },
+  '1': 'ou24b02k66sv/1476273454878/27764/APP-111',
+  '2': 'debug',
+  '3': '-',
+  '4': '-',
+  '5': 'ACT',
+  '6': 'd6vo9alltwer/p5ulgzv006t0',
+  '7': 'name:transport,plugin:define,role:seneca,seq:4,tag:undefined',
+  '8': 'plugin',
+  '9': 'transport',
+  '10': 'ACT',
+  '11': '9ltwz8rg4hrt/ssd2gkrzagh8',
+  '12': 'hook:client,role:transport,type:tcp',
+  '13': 'client',
+  '14': 'tcp',
+  '15': 'connect',
+  '16': { pin: { role: 'BcryptService' } },
+  '17': 'seneca_role_BcryptService_',
+  '18': 
+   { type: 'tcp',
+     port: 10202,
+     pins: [ [Object], [Object] ],
+     pg: 'role:BcryptService;role:DocCryptoService',
+     id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp',
+     role: 'transport',
+     hook: 'client',
+     'plugin$': { name: 'client$', tag: undefined },
+     'ungate$': true,
+     'fatal$': true,
+     'tx$': 'ssd2gkrzagh8',
+     'meta$': 
+      { id: '9ltwz8rg4hrt/ssd2gkrzagh8',
+        tx: 'ssd2gkrzagh8',
+        start: 1476273455525,
+        pattern: 'hook:client,role:transport,type:tcp',
+        action: '(eni979215q6p)',
+        entry: true,
+        chain: [],
+        sync: true },
+     host: '127.0.0.1',
+     timeout: 5555 } }
+
+  
 ```
