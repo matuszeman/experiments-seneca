@@ -29,7 +29,7 @@ const seneca = require('seneca')({
       {
         level: 'debug+',
         handler: function() {
-          console.log(arguments);//XXX
+          //console.log(arguments);//XXX
           const entry = logger.createEntry(arguments);
           console.log(entry);//XXX
         }

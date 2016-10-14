@@ -4,7 +4,7 @@ const co = require('co');
 const createErrorLog = require('./logger').createErrorLog;
 
 function* appMiddleware(cryptoService, bcryptService) {
-  //const encrypt = yield cryptoService.encrypt({type: 'doca', doc: {enc1: 'AAAA', enc2: 'BBBB', field1: 'XXXX'}});
+  const encrypt = yield cryptoService.encrypt({type: 'doca', doc: {enc1: 'AAAA', enc2: 'BBBB', field1: 'XXXX'}});
   //console.log('Encrypt', encrypt);//XXX
   //const decrypt = yield cryptoService.decrypt({type: 'doca', doc: encrypt.doc});
   //console.log('Decrypt', decrypt);//XXX

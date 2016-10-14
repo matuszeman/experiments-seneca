@@ -3,6 +3,10 @@ const jsonic = require('jsonic');
 
 class SenecaLogger {
 
+  construct(opts) {
+
+  }
+
   createEntry(args) {
     const level = args[2];
     const entry = {
@@ -51,9 +55,6 @@ class SenecaLogger {
   }
 
   createDebugEntry(args, entry) {
-    //identify user's act
-    const source = _.trim(args[4]);
-    //if (args[3] !== 'act' || _.includes(['root$', '-', 'web', 'mem-store/1', 'transport', 'basic'], source)) {
     if (args[3] === 'act') {
       return this.createActEntry(args, entry);
     }
@@ -127,7 +128,7 @@ class SenecaLogger {
   createActEntry(args, entry) {
     //is remote service/client call?
     if (!_.includes(['CLIENT', 'LISTEN'], args[11])) {
-      return;
+      return this.createUnhandled(args, 'createActEntry: args[11] neither CLIENT, LISTEN');
     }
 
     let actEntry;
@@ -156,7 +157,7 @@ class SenecaLogger {
     }
 
     if(!actEntry) {
-      return this.createUnhandled(args, 'crateActEntry');
+      return this.createUnhandled(args, 'crateActEntry: args[9] neither ENTRY, EXIT');
     }
 
     actEntry.actId = args[6];
