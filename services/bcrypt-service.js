@@ -18,6 +18,8 @@ module.exports = class BcryptService extends AbstractService {
     return this.promiseMethod(args, {
       value: Joi.string().required()
     }, (args) => {
+      //return Promise.reject(new Error('Buuuum!'));
+
       return new Promise((resolve, reject) => {
         bcrypt.hash(args.value, this.options.bcryptRounds, (err, hash) => {
           if (err) {

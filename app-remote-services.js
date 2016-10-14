@@ -6,8 +6,16 @@ const BcryptService = require('./services/bcrypt-service');
 const ErrorService = require('./services/error-service');
 const Encryptor = require('./services/encryptor');
 
-let seneca = require('seneca')();
+let seneca = require('seneca')({
+  tag: 'SERVICES-111'
+});
 seneca.options('./plugin-options.js');
+
+seneca.use(require('./logger').plugin, {
+  log: function(entry) {
+    console.log(entry);//XXX
+  }
+});
 
 seneca.use({
   init: SenecaFactory.createPlugin(new DocCryptoService(new Encryptor()), {
