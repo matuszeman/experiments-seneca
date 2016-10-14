@@ -5,13 +5,18 @@ class SenecaLogger {
 
   createEntry(args) {
     const level = args[2];
+    const entry = {
+      ts: new Date(args[0]),
+      instance: this.getInstanceName(args[1]),
+      level: level
+    };
     switch (level) {
       case 'error':
-        return this.createErrorEntry(args);
+        return this.createErrorEntry(args, entry);
       case 'debug':
-        return this.createDebugEntry(args);
+        return this.createDebugEntry(args, entry);
       case 'info':
-        return this.createInfoEntry(args);
+        return this.createInfoEntry(args, entry);
       default:
         return this.createUnhandled(args, 'createEntry');
     }
@@ -25,8 +30,7 @@ class SenecaLogger {
     return this.createUnhandled(args, 'createInfoEntry');
   }
 
-  createErrorEntry(args) {
-    const ts = new Date([args[0]]);
+  createErrorEntry(args, entry) {
     const payload = jsonic(args[9]);
     const service = payload.role;
     const cmd = payload.cmd;
@@ -36,33 +40,32 @@ class SenecaLogger {
       client = true;
     }
 
-    return {
-      ts: ts,
+    return _.defaults(entry, {
       type: client ? 'client-act-error' : 'service-act-error',
       service: service,
       cmd: cmd,
       payload: this.filterPayload(service, cmd, payload),
       message: args[13],
       trace: args[16]
-    };
+    });
   }
 
-  createDebugEntry(args) {
+  createDebugEntry(args, entry) {
     //identify user's act
     const source = _.trim(args[4]);
     //if (args[3] !== 'act' || _.includes(['root$', '-', 'web', 'mem-store/1', 'transport', 'basic'], source)) {
     if (args[3] === 'act') {
-      return this.createActEntry(args);
+      return this.createActEntry(args, entry);
     }
 
     if (args[9] === 'transport') {
-      return this.createTransportEntry(args);
+      return this.createTransportEntry(args, entry);
     }
 
     return this.createUnhandled(args, 'createDebugEntry')
   }
 
-  createTransportEntry(args) {
+  createTransportEntry(args, entry) {
     return;
 
     const some = jsonic(args[12]);
@@ -81,15 +84,14 @@ class SenecaLogger {
 
       const trans = args[15];
       const event = 'service-transport-' + args[14];
-      const entry = {
-        ts: new Date(args[0]),
+      const entry = _.defaults(entry, {
         type: event,
         transport: {
           type: trans.type,
           host: trans.host,
           port: trans.port
         }
-      };
+      });
 
       if (args[19]) {
         entry.error = args[19];
@@ -102,11 +104,11 @@ class SenecaLogger {
     if (some.hook === 'client') {
       console.log(args);//XXX
       const event = 'client-transport-' + args[15];
-      const entry = {
+      const entry = _.defaults(entry, {
         ts: new Date(args[0]),
         type: event,
         service: _.get(args, '16.pin.role')
-      };
+      });
 
       if (args[19]) {
         entry.error = args[19];
@@ -122,18 +124,18 @@ class SenecaLogger {
     return this.createUnhandled(args, 'createTransportEntry');
   }
 
-  createActEntry(args) {
+  createActEntry(args, entry) {
     //is remote service/client call?
     if (!_.includes(['CLIENT', 'LISTEN'], args[11])) {
       return;
     }
 
-    let entry;
+    let actEntry;
     const payload = jsonic(args[8]);
     if (args[9] === 'ENTRY') {
       const service = payload.role;
       const cmd = payload.cmd;
-      entry = {
+      actEntry = {
         type: 'act-request',
         service: service,
         cmd: cmd,
@@ -145,7 +147,7 @@ class SenecaLogger {
       const pins = jsonic(args[7]);
       const cmd = payload.cmd || pins.cmd;
       const service = pins.role;
-      entry = {
+      actEntry = {
         type: 'act-response',
         service: service,
         cmd: cmd,
@@ -153,29 +155,28 @@ class SenecaLogger {
       };
     }
 
-    if(!entry) {
+    if(!actEntry) {
       return this.createUnhandled(args, 'crateActEntry');
     }
 
-    entry.ts = new Date(args[0]);
-    entry.actId = args[6];
+    actEntry.actId = args[6];
 
     //client
     if(args[11] === 'CLIENT') {
       //console.log(args);//XXX
-      entry.type = 'client-' + entry.type;
+      actEntry.type = 'client-' + actEntry.type;
       if(args[12] !== '-') {
-        entry.remoteInstance = this.getInstanceName(args[12]);
+        actEntry.remoteInstance = this.getInstanceName(args[12]);
       }
     }
     //service
     if (args[11] === 'LISTEN') {
       //console.log(args);//XXX
-      entry.type = 'service-' + entry.type;
-      entry.remoteInstance = this.getInstanceName(args[12]);
+      actEntry.type = 'service-' + actEntry.type;
+      actEntry.remoteInstance = this.getInstanceName(args[12]);
     }
 
-    return entry;
+    return _.defaults(entry, actEntry);
   }
 
   getInstanceName(name) {
