@@ -205,6 +205,71 @@ node error-seneca-remote.js --seneca.log.quiet
 
 # Logging
 
+Seneca v2.1 logging is very confusing with no documentation at all.
+Implemented logger tries to simplify end-user usage by abstracting this mess into useful log entries.
+
+## Logger usage
+
+```
+seneca.use(require('./logger').plugin, {
+    payloadFilter: { //TODO
+      serviceName: {
+        cmdName: {
+          in: [
+            'username'
+            'password'
+          ],
+          out: [
+            'user.password_digest'
+          ]
+        }
+      }
+    },
+    log: function(entry) {
+        console.log(entry);//XXX
+    }
+});
+```
+
+## Log entries implemented
+
+### act-requests
+
+* type: 'client-act-request' / 'service-act-request'
+* service
+* cmd
+* payload
+* remoteInstance (TODO not currently available for client-act-request) 
+
+### act-response
+
+* type: 'client-act-response' / 'service-act-response'
+* service
+* cmd
+* payload
+* remoteInstance 
+
+### act-error
+
+* type: 'service-act-error' / 'client-act-error'
+* service
+* cmd
+* payload
+* message
+* trace
+
+### transport-*
+
+TODO
+It's possible to monitor events e.g. when TCP connection to remote instance got connected or disconnected.
+ 
+* connect
+* reconnect
+* disconnected
+
+
+## Log params debug
+
 Debug handler params:
 
 0. timestamp
@@ -220,8 +285,6 @@ Debug handler params:
 10. msgId
 11. ?
 12. receiver (dir: IN '-', OUT senecaInstanceName)
-
-## Examples
 
 ### Call request
 

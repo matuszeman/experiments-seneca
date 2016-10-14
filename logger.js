@@ -3,8 +3,9 @@ const jsonic = require('jsonic');
 
 class SenecaLogger {
 
-  construct(opts) {
-
+  construct(opts, seneca) {
+    this.options = opts;
+    this.seneca = seneca;
   }
 
   createEntry(args) {
@@ -86,7 +87,7 @@ class SenecaLogger {
 
       const trans = args[15];
       const event = 'service-transport-' + args[14];
-      const entry = _.defaults(entry, {
+      _.defaults(entry, {
         type: event,
         transport: {
           type: trans.type,
@@ -106,7 +107,7 @@ class SenecaLogger {
     if (some.hook === 'client') {
       console.log(args);//XXX
       const event = 'client-transport-' + args[15];
-      const entry = _.defaults(entry, {
+      _.defaults(entry, {
         ts: new Date(args[0]),
         type: event,
         service: _.get(args, '16.pin.role')
@@ -214,7 +215,7 @@ function createErrorLog(err) {
 function plugin(opts) {
   const seneca = this;
 
-  const logger = new SenecaLogger(opts.logger, seneca);
+  const logger = new SenecaLogger(opts.options, seneca);
   seneca.logroute({
     level: 'all',
     handler: function() {
