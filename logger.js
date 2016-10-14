@@ -52,15 +52,7 @@ class SenecaLogger {
     const source = _.trim(args[4]);
     //if (args[3] !== 'act' || _.includes(['root$', '-', 'web', 'mem-store/1', 'transport', 'basic'], source)) {
     if (args[3] === 'act') {
-      if (args[11] === 'CLIENT' || args[11] === 'LISTEN') {
-        return this.createActEntry(args);
-      }
-      //if (args[11] === 'CLIENT') {
-      //  return this.createActEntry(args);
-      //}
-      //if (args[11] === 'LISTEN') {
-      //  return this.createActEntry(args);
-      //}
+      return this.createActEntry(args);
     }
 
     if (args[9] === 'transport') {
@@ -131,15 +123,17 @@ class SenecaLogger {
   }
 
   createActEntry(args) {
-    const ts = new Date([args[0]]);
+    //is remote service/client call?
+    if (!_.includes(['CLIENT', 'LISTEN'], args[11])) {
+      return;
+    }
 
+    let entry;
     const payload = jsonic(args[8]);
     if (args[9] === 'ENTRY') {
-      console.log(args);//XXX
       const service = payload.role;
       const cmd = payload.cmd;
-      return {
-        ts: ts,
+      entry = {
         type: 'act-request',
         service: service,
         cmd: cmd,
@@ -148,21 +142,40 @@ class SenecaLogger {
     }
 
     if (args[9] === 'EXIT') {
-      console.log(args);//XXX
-      const cmd = payload.cmd;
       const pins = jsonic(args[7]);
+      const cmd = payload.cmd || pins.cmd;
       const service = pins.role;
-      return {
-        ts: ts,
+      entry = {
         type: 'act-response',
         service: service,
         cmd: cmd,
-        payload: this.filterPayload(service, cmd, payload),
-        remoteInstance: this.getInstanceName(args[12])
+        payload: this.filterPayload(service, cmd, payload)
       };
     }
 
-    return this.createUnhandled(args, 'crateActEntry');
+    if(!entry) {
+      return this.createUnhandled(args, 'crateActEntry');
+    }
+
+    entry.ts = new Date(args[0]);
+    entry.actId = args[6];
+
+    //client
+    if(args[11] === 'CLIENT') {
+      //console.log(args);//XXX
+      entry.type = 'client-' + entry.type;
+      if(args[12] !== '-') {
+        entry.remoteInstance = this.getInstanceName(args[12]);
+      }
+    }
+    //service
+    if (args[11] === 'LISTEN') {
+      //console.log(args);//XXX
+      entry.type = 'service-' + entry.type;
+      entry.remoteInstance = this.getInstanceName(args[12]);
+    }
+
+    return entry;
   }
 
   getInstanceName(name) {

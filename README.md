@@ -572,3 +572,66 @@ Send init
 
   
 ```
+
+
+Seneca 3.2.1
+
+```
+{ actid: '7cvcyv72o3c3/zds381ro5jry',
+  msg: 
+   { role: 'BcryptService',
+     cmd: 'bcryptHash',
+     value: 'TEST',
+     'meta$': 
+      { id: '7cvcyv72o3c3/zds381ro5jry',
+        tx: 'zds381ro5jry',
+        pattern: 'role:BcryptService',
+        action: '(vwk0cb1wnlpy)',
+        plugin_name: 'client$',
+        plugin_tag: '-',
+        start: 1476438898537,
+        entry: true,
+        chain: [],
+        sync: true },
+     'plugin$': { name: 'client$', tag: '-' },
+     'tx$': 'zds381ro5jry' },
+  entry: true,
+  prior: [],
+  gate: undefined,
+  caller: undefined,
+  meta: 
+   { plugin_name: 'client$',
+     plugin_tag: '-',
+     plugin_fullname: 'client$',
+     log: 
+      { [Function: prepare_log_data]
+        debug: [Function: prepare_log_data],
+        info: [Function: prepare_log_data],
+        warn: [Function: prepare_log_data],
+        error: [Function: prepare_log_data],
+        fatal: [Function: prepare_log_data] },
+     raw: { role: 'BcryptService', 'client$': true, 'internal$': [Object] },
+     sub: false,
+     client: true,
+     deprecate: undefined,
+     args: { role: 'BcryptService' },
+     rules: {},
+     id: '(vwk0cb1wnlpy)',
+     func: 
+      { [Function: transport_client]
+        id: 'pg:role:BcryptService;role:DocCryptoService,pins:[object Object],[object Object],port:10202,type:tcp' },
+     pattern: 'role:BcryptService',
+     msgcanon: { role: 'BcryptService' },
+     priorpath: '' },
+  client: true,
+  listen: false,
+  transport: {},
+  kind: 'act',
+  case: 'IN',
+  level: 'debug',
+  plugin_name: 'client$',
+  plugin_tag: '-',
+  pattern: 'role:BcryptService',
+  seneca: undefined,
+  when: 1476438898538 }
+```

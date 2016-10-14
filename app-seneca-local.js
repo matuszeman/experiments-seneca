@@ -27,7 +27,7 @@ const seneca = require('seneca')({
     level: 'all',
     map: [
       {
-        level: 'debug,error',
+        level: 'debug+',
         handler: function() {
           console.log(arguments);//XXX
           const entry = logger.createEntry(arguments);
