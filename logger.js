@@ -67,6 +67,7 @@ class SenecaLogger {
   }
 
   createTransportEntry(args, entry) {
+    //TODO disabled for now, could be used to track service endpoint states
     return;
 
     const some = jsonic(args[12]);
@@ -189,24 +190,48 @@ class SenecaLogger {
   }
 }
 
+//not used
 function createErrorLog(err) {
   if (!err.seneca) {
     throw new Error('Not a seneca error');
   }
 
   const pattern = jsonic(err.details.pattern);
+  console.log(err);//XXX
 
   return {
     ts: new Date(),
-    type: 'act-error',
+    level: 'error',
+    type: 'seneca-error',
     service: pattern.role,
     cmd: pattern.cmd,
+    actId: err.details.id,
     message: err.message,
     trace: err.trace
   }
 }
 
+function plugin(opts) {
+  const seneca = this;
+
+  const logger = new SenecaLogger(opts.logger, seneca);
+  seneca.logroute({
+    level: 'all',
+    handler: function() {
+      //console.log(arguments);//XXX
+      const entry = logger.createEntry(arguments);
+      if (entry) {
+        opts.log(entry);
+      }
+    }
+  });
+
+  return {
+    name: 'SenecaLogger'
+  };
+}
+
 module.exports = {
   SenecaLogger,
-  createErrorLog
+  plugin
 };

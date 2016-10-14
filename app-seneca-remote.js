@@ -2,9 +2,6 @@ const SenecaFactory = require('./seneca').SenecaFactory;
 
 const app = require('./app');
 
-const SenecaLogger = require('./logger').SenecaLogger;
-const logger = new SenecaLogger();
-
 const seneca = require('seneca')({
   tag: 'APP-remote',
   timeout: 3000, // action timeout
@@ -15,21 +12,12 @@ const seneca = require('seneca')({
     repl: false,
     transport: true,
     web: false
-  },
-  log: {
-    level: 'all',
-    map: [
-      {
-        level: 'debug+',
-        handler: function() {
-          //console.log(arguments);//XXX
-          const entry = logger.createEntry(arguments);
-          if (entry) {
-            console.log(entry);//XXX
-          }
-        }
-      }
-    ]
+  }
+});
+
+seneca.use(require('./logger').plugin , {
+  log: function(entry) {
+    console.log(entry);//XXX
   }
 });
 

@@ -6,9 +6,6 @@ const DocCryptoService = require('./services/doc-crypto-service');
 const BcryptService = require('./services/bcrypt-service');
 const Encryptor = require('./services/encryptor');
 
-const SenecaLogger = require('./logger').SenecaLogger;
-const logger = new SenecaLogger();
-
 const seneca = require('seneca')({
   tag: 'APP-local',
   timeout: 2000, // action timeout
@@ -19,25 +16,15 @@ const seneca = require('seneca')({
     repl: false,
     transport: true,
     web: false
-  },
-  debug: {
-    //act_caller: true
-  },
-  log: {
-    level: 'all',
-    map: [
-      {
-        level: 'debug+',
-        handler: function() {
-          //console.log(arguments);//XXX
-          const entry = logger.createEntry(arguments);
-          console.log(entry);//XXX
-        }
-      }
-    ]
   }
 });
 seneca.options('./plugin-options.js');
+
+seneca.use(require('./logger').plugin, {
+  log: function(entry) {
+    console.log(entry);//XXX
+  }
+});
 
 seneca.use({
   init: SenecaFactory.createPlugin(new DocCryptoService(new Encryptor()), {
