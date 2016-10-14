@@ -40,6 +40,10 @@ class SenecaLogger {
     const service = payload.role;
     const cmd = payload.cmd;
 
+    let actId = args[15];
+    actId = actId.substr(actId.indexOf('id:') + 3);
+    actId = actId.substr(0, actId.indexOf(','));
+
     let client = false;
     if (_.includes(args[4], 'client$')) {
       client = true;
@@ -49,6 +53,7 @@ class SenecaLogger {
       type: client ? 'client-act-error' : 'service-act-error',
       service: service,
       cmd: cmd,
+      actId: actId,
       payload: this.filterPayload(service, cmd, payload),
       message: args[13],
       trace: args[16]

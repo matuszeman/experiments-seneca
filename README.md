@@ -242,6 +242,7 @@ Along with other parameters listed below, each log entry also includes:
 ### act-requests
 
 * type: 'client-act-request' / 'service-act-request'
+* actId - unique seneca act id, shared on both client, service instance
 * service
 * cmd
 * payload
@@ -250,6 +251,7 @@ Along with other parameters listed below, each log entry also includes:
 ### act-response
 
 * type: 'client-act-response' / 'service-act-response'
+* actId
 * service
 * cmd
 * payload
@@ -258,6 +260,7 @@ Along with other parameters listed below, each log entry also includes:
 ### act-error
 
 * type: 'service-act-error' / 'client-act-error'
+* actId
 * service
 * cmd
 * payload
